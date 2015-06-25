@@ -1,5 +1,5 @@
 
-Water Retention on Magic Squares Solver v0.1
+Water Retention on Magic Squares Solver v0.11a
 
 Project Description:
 *******************************************************************************************
@@ -30,4 +30,15 @@ Release Description
 *******************************************************************************************
 This release contains the source-code and binaries for Windows and MacOSX and projects
 for XCode 3.6 and Visual Studio 10.
+*******************************************************************************************
+
+Changes:
+*******************************************************************************************
+v0.11a
+
+- Added support for the Associative Magic Square-constraints so the Associative Magic Squares
+can be explored with this solver as well.
+- Time-scale changed from milliseconds to seconds.
+- Added average time calculation which gives the average time of the runs.
+
 *******************************************************************************************
