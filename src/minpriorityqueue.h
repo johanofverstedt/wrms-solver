@@ -4,7 +4,7 @@
  *
  *	Author: Johan Öfverstedt
  *	Modified: July 2012
- *	Version 0.1
+ *	Version 0.12a
  *
  *	minpriorityqueue.h
  *	Minimum Priority Queue Implementation

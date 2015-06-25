@@ -4,7 +4,7 @@
  *
  *	Author: Johan Öfverstedt
  *	Modified: July 2012
- *	Version 0.1
+ *	Version 0.12a
  *
  *	water_retention_solver.cpp
  *	Water Retention Solver implementing two of the three different
@@ -86,6 +86,7 @@ int tabuNaive(MSMatrix *param_mat, int param_tabulength, int param_iterations, b
 		++it;
 		tabulist[sel_ind1] = it + param_tabulength;
 		tabulist[sel_ind2]= it + param_tabulength;
+
 	}
 
 	cout << "Iterations: " << it << endl;
@@ -108,7 +109,11 @@ int tabuNaive(MSMatrix *param_mat, int param_tabulength, int param_iterations, b
  *	- are marked by *** IMPROVEMENT comments.
  */
 
-int tabuRetention(MSMatrix *param_mat, int param_tabulength, int param_iterations, bool param_terminate_on_first_solution) {
+int tabuRetention(MSMatrix *param_mat,
+	int param_tabulength,
+	int param_iterations,
+	int param_chance_of_random_restart,
+	bool param_terminate_on_first_solution) {
 	
 	int it = 0;
 
@@ -142,6 +147,9 @@ int tabuRetention(MSMatrix *param_mat, int param_tabulength, int param_iteration
 
 	while((param_mat->violation() > 0 || !param_terminate_on_first_solution) && it < param_iterations) {
 
+		if(param_chance_of_random_restart > 0 && (rand() % param_chance_of_random_restart) == 0)
+			param_mat->randomRestart();
+
 		float best_delta = 0.0f;
 		int sel_ind1 = -1;
 		int sel_ind2 = -1;
@@ -166,7 +174,7 @@ int tabuRetention(MSMatrix *param_mat, int param_tabulength, int param_iteration
 				float water_delta = (float)(-param_mat->swapRetentionDelta(i1, i2));
 
 				//If move is bad, make it tabu for (tabu length) ^ 2 iterations *** IMPROVEMENT 
-				if(water_delta > 5)
+				if(water_delta > n)
 					swap_tabulist[i1 * nn + i2] = it + param_tabulength * param_tabulength;
 
 				if(it % 10 < 5) {
@@ -239,8 +247,10 @@ int main(int argc, char **argv) {
 	MSMatrix *mat;
 
 	int n = 0;
+	int mode = 0;
 	int runs = 0;
 	int iterations = 0;
+	int chance_of_random_restart = 1000000;
 	bool terminate_on_first_solution = false;
 
 	//Seed random generator
@@ -249,7 +259,16 @@ int main(int argc, char **argv) {
 	cout << "Dimension: ";
 
 	cin >> n;
+	
+	cout << "Mode (0: Normal, 1: Associative, 2: Semi-Magic): ";
+	
+	cin >> mode;
 
+	if(!(mode == 0 || mode == 1 || mode == 2)) {
+		cout << "Unsupported mode." << endl;
+		return 0;
+	}
+	
 	cout << "Runs: ";
 
 	cin >> runs;
@@ -257,6 +276,10 @@ int main(int argc, char **argv) {
 	cout << "Iterations: ";
 
 	cin >> iterations;
+
+	cout << "Chance of random restart (1/x, 0: No Restarts): ";
+
+	cin >> chance_of_random_restart;
 
 	cout << "Terminate on first magic square (Y/N): ";
 	
@@ -271,26 +294,32 @@ int main(int argc, char **argv) {
 
 	cout << endl;
 
-	mat = new MSMatrix(n);
-
+	mat = new MSMatrix(n, mode == 1, mode == 1 || mode == 2);
+	
 	int best_retention = -1;
 	int *best_mat = new int[nn];
 
+	float time_elapsed = 0.0f;
+	
 	for(int i = 0; i < runs; ++i) {
 
 		mat->randomRestart();
 
 		int clock1 = clock();
 
-		int ret = tabuRetention(mat, (2 * n) / 3, iterations, terminate_on_first_solution);
+		int ret = tabuRetention(mat, (2 * n) / 3, iterations, chance_of_random_restart, terminate_on_first_solution);
 		
 		int clock2 = clock();
 
 		cout << "Run: " << (i + 1) << endl;
-		cout << "Time: " << ((clock2 - clock1)/((float)CLOCKS_PER_SEC / 1000.0f)) << "ms." << endl;
+		
+		float t = ((clock2 - clock1)/((float)CLOCKS_PER_SEC));
+		time_elapsed += t;
+		
+		cout << "Time: " << t << "s." << endl;
 
 		if(ret >= 0 && mat->violation() == 0) {
-			cout << "Square is Magic." << endl;
+			cout << "Square satisfies constraints." << endl;
 			cout << "Retention: " << ret << " ( Best: " << best_retention << " )" << endl;
 			if(ret > best_retention) {
 				best_retention = ret;
@@ -313,8 +342,8 @@ int main(int argc, char **argv) {
 		cout << endl;
 	}
 
-	//cout << "Violation: " << mat->violation();
-
+	cout << "Avg Time: " << (time_elapsed / (float)runs) << endl;
+	
 	cout << endl;
 
 	delete mat;

@@ -34,12 +34,14 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 364234847;
-			PBXWorkspaceStateSaveDate = 364234847;
+			PBXPerProjectTemplateStateSaveDate = 364966701;
+			PBXWorkspaceStateSaveDate = 364966701;
 		};
 		perUserProjectItems = {
-			949AAE0D15B4ED650022BDEC = 949AAE0D15B4ED650022BDEC /* PBXBookmark */;
 			949AAE0E15B4ED650022BDEC = 949AAE0E15B4ED650022BDEC /* PBXTextBookmark */;
+			94C8AEB415C0F17A0011400F = 94C8AEB415C0F17A0011400F /* PBXTextBookmark */;
+			94C8AEC115C0F1C50011400F = 94C8AEC115C0F1C50011400F /* PBXTextBookmark */;
+			94C8AEC215C0F1C50011400F = 94C8AEC215C0F1C50011400F /* PBXTextBookmark */;
 		};
 		sourceControlManager = 940EF85315AF105E005FA78F /* Source Control */;
 		userBuildSettings = {
@@ -104,9 +106,9 @@
 	};
 	949AADF215B4ECB20022BDEC /* minpriorityqueue.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {519, 676}}";
-			sepNavSelRange = "{118, 0}";
-			sepNavVisRange = "{1, 330}";
+			sepNavIntBoundsRect = "{{0, 0}, {519, 650}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 285}";
 		};
 	};
 	949AADF315B4ECB20022BDEC /* ms_matrix.cpp */ = {
@@ -130,10 +132,6 @@
 			sepNavVisRange = "{0, 582}";
 		};
 	};
-	949AAE0D15B4ED650022BDEC /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 949AADF215B4ECB20022BDEC /* minpriorityqueue.h */;
-	};
 	949AAE0E15B4ED650022BDEC /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 949AADF215B4ECB20022BDEC /* minpriorityqueue.h */;
@@ -142,6 +140,36 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 329;
+		vrLoc = 0;
+	};
+	94C8AEB415C0F17A0011400F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 949AADF215B4ECB20022BDEC /* minpriorityqueue.h */;
+		name = "minpriorityqueue.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 344;
+		vrLoc = 0;
+	};
+	94C8AEC115C0F1C50011400F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 949AADF215B4ECB20022BDEC /* minpriorityqueue.h */;
+		name = "minpriorityqueue.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 285;
+		vrLoc = 0;
+	};
+	94C8AEC215C0F1C50011400F /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 949AADF215B4ECB20022BDEC /* minpriorityqueue.h */;
+		name = "minpriorityqueue.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 285;
 		vrLoc = 0;
 	};
 }

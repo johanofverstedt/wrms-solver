@@ -4,7 +4,7 @@
  *
  *	Author: Johan Öfverstedt
  *	Modified: July 2012
- *	Version 0.1
+ *	Version 0.12a
  *
  *	ms_matrix.h
  *	Magic Square Matrix Implementation with Water Retention
@@ -25,7 +25,7 @@
 
 class MSMatrix {
 public:
-	MSMatrix(unsigned int param_n);
+	MSMatrix(unsigned int param_n, bool param_associative, bool param_semi_magic);
 	~MSMatrix();
 
 	void randomRestart();
@@ -60,6 +60,10 @@ protected:
 	int *mat;
 
 	int magic_const;
+	int associative_const;
+
+	bool associative;
+	bool semi_magic;
 
 	int cur_violation;
 	int *row_sum;

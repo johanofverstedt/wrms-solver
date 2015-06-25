@@ -4,7 +4,7 @@
  *
  *	Author: Johan Öfverstedt
  *	Modified: July 2012
- *	Version 0.1
+ *	Version 0.12a
  *
  *	ms_matrix.cpp
  *	Magic Square Matrix Implementation with Water Retention
@@ -28,7 +28,7 @@
 
 using namespace std;
 
-MSMatrix::MSMatrix(unsigned int param_n) {
+MSMatrix::MSMatrix(unsigned int param_n, bool param_associative, bool param_semi_magic) {
 
 	n = param_n;
 	nn = n * n;
@@ -38,6 +38,12 @@ MSMatrix::MSMatrix(unsigned int param_n) {
 	mat = new int[nn];
 	row_sum = new int[n];
 	col_sum = new int[n];
+
+	associative = param_associative;
+	if(associative)
+		associative_const = nn + 1;
+	
+	semi_magic = param_semi_magic;
 
 	randomRestart();
 
@@ -128,17 +134,31 @@ int MSMatrix::violation() {
 
 	//Diag constraints
 
-	right_diag_sum = 0;
-	left_diag_sum = 0;
+	if(!semi_magic) {
 
-	for(int i = 0; i < n; ++i) {
-		right_diag_sum += mat[i * n + i];
-		left_diag_sum += mat[(n - i - 1) * n + i];
+		right_diag_sum = 0;
+		left_diag_sum = 0;
+
+		for(int i = 0; i < n; ++i) {
+			right_diag_sum += mat[i * n + i];
+			left_diag_sum += mat[(n - i - 1) * n + i];
+		}
+
+		cur_violation += abs(right_diag_sum - magic_const);
+		cur_violation += abs(left_diag_sum - magic_const);
+	
 	}
 
-	cur_violation += abs(right_diag_sum - magic_const);
-	cur_violation += abs(left_diag_sum - magic_const);
-
+	if(associative) {
+	
+		int nnhalf = nn / 2;
+		
+		for(int i = 0; i < nnhalf; ++i) {
+			cur_violation += abs(mat[i] + mat[(nn-i-1)] - associative_const);
+		}
+		
+	}
+	
 	return cur_violation;
 
 }
@@ -164,20 +184,33 @@ int MSMatrix::swapDelta(int param_index1, int param_index2) {
 		delta += abs(col_sum[j2] - mat[param_index2] + mat[param_index1] - magic_const) - abs(col_sum[j2] - magic_const);
 	}
 
-	if(i1 == j1 && i2 != j2) { //First in right column but second is not
-		delta += abs(right_diag_sum - mat[param_index1] + mat[param_index2] - magic_const) - abs(right_diag_sum - magic_const);
-	}
-	if(i1 != j1 && i2 == j2) { //First in right column but second is not
-		delta += abs(right_diag_sum - mat[param_index2] + mat[param_index1] - magic_const) - abs(right_diag_sum - magic_const);
+	if(!semi_magic) {
+	
+		if(i1 == j1 && i2 != j2) { //First in right column but second is not
+			delta += abs(right_diag_sum - mat[param_index1] + mat[param_index2] - magic_const) - abs(right_diag_sum - magic_const);
+		}
+		if(i1 != j1 && i2 == j2) { //First in right column but second is not
+			delta += abs(right_diag_sum - mat[param_index2] + mat[param_index1] - magic_const) - abs(right_diag_sum - magic_const);
+		}
+
+		if(i1 == (n - j1 - 1) && i2 != (n - j2 - 1)) { //First in right column but second is not
+			delta += abs(left_diag_sum - mat[param_index1] + mat[param_index2] - magic_const) - abs(left_diag_sum - magic_const);
+		}
+		if(i1 != (n - j1 - 1) && i2 == (n - j2 - 1)) { //First in right column but second is not
+			delta += abs(left_diag_sum - mat[param_index2] + mat[param_index1] - magic_const) - abs(left_diag_sum - magic_const);
+		}
+	
 	}
 
-	if(i1 == (n - j1 - 1) && i2 != (n - j2 - 1)) { //First in right column but second is not
-		delta += abs(left_diag_sum - mat[param_index1] + mat[param_index2] - magic_const) - abs(left_diag_sum - magic_const);
+	if(associative) {
+		
+		if(param_index1 != (nn - param_index2 - 1)) { //Elements not associative-pair
+			delta += abs((mat[param_index2] + mat[nn - param_index1 - 1] - associative_const)) - abs((mat[param_index1] + mat[nn - param_index1 - 1] - associative_const));
+			delta += abs((mat[param_index1] + mat[nn - param_index2 - 1] - associative_const)) - abs((mat[param_index2] + mat[nn - param_index2 - 1] - associative_const));
+		}
+		
 	}
-	if(i1 != (n - j1 - 1) && i2 == (n - j2 - 1)) { //First in right column but second is not
-		delta += abs(left_diag_sum - mat[param_index2] + mat[param_index1] - magic_const) - abs(left_diag_sum - magic_const);
-	}
-
+	
 	return delta;
 
 }

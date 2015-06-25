@@ -29,10 +29,20 @@ easily post new constraints along with the Magic-constraints.
 Release Description
 *******************************************************************************************
 This release contains the source-code and binaries for Windows and MacOSX and projects
-for XCode 3.6 and Visual Studio 10.
+for XCode 3.6 and Visual Studio 2008/2010.
 *******************************************************************************************
 
 Changes:
+*******************************************************************************************
+v0.12a
+
+- Added support for Semi-Magic Squares.
+- Implemented the fact that every Associative Semi-Magic Square is a Associative Magic Square,
+by not using the diagonal constraints for Associative Magic-Squares.
+- Added support for random restarts within a run.
+
+*******************************************************************************************
+
 *******************************************************************************************
 v0.11a
 
